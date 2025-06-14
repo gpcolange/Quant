@@ -3,11 +3,12 @@ import numpy as np
 from arch import arch_model
 import matplotlib.pyplot as plt
 
+# Goal is to recreate the GARCH(1,1) model from Hull chapter 23
+
 # Import Data
 SP500               = yf.download("^GSPC", start="2005-07-18", end="2010-08-14")
 
 # Calculate compounded return
-#SP500["u"]           = np.log(SP500["Close"]/SP500["Close"].shift(1))
 SP500["u"]          = (SP500["Close"] - SP500["Close"].shift(1))/SP500["Close"].shift(1)
 
 # Trim Data
