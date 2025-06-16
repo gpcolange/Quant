@@ -22,6 +22,12 @@ def BlackScholesEuroPrice(St, r, sigma, T, K):
     C   = St*stat.norm.cdf(d1) - K*np.exp(-r*T)*stat.norm.cdf(d2)
     P   = St*(stat.norm.cdf(d1) - 1) + K*np.exp(-r*T)*(1 - stat.norm.cdf(d2))
 
+    print("Call price is $", np.round(C,2))
+    print("Put price is $", np.round(P,2))
+
+    print("Increase in stock price for buyer of call option to break even is $", np.round(C - (St - K),2))
+    print("Decrease in stock price for buyer of put option to break even is $", np.round(P - (K - St),2))
+
     return C,P
 
 def Garch11(stock, start_date, end_date):
@@ -65,6 +71,12 @@ def Garch11(stock, start_date, end_date):
     plt.plot(results.conditional_volatility*100)
     plt.title([stock, "Volatility"])
     plt.ylabel("%")
+
+    plt.figure()
+    plt.plot(asset.u)
+    plt.plot(2*results.conditional_volatility)
+    plt.plot(-2*results.conditional_volatility)
+    plt.title('Log Returns with 95% CI')
     plt.show()
 
     return results, asset
