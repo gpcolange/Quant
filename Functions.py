@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import scipy.stats as stat
 
 def BlackScholesEuroPrice(St, r, sigma, T, K):
+    # Calculate call and put price of European option with no dividend payout
     # Inputs:
     # St - asset price at time t
     # r - Interest rate
@@ -99,3 +100,57 @@ def GeometricSeries(p0, r, t):
     st      = p0*(1 - theta**(t+1))/(1 - theta) # Sum of Geometric Series
 
     return p, st
+
+def EuroImpliedVolatility(V, St, r, T, K, type):
+    # Implied volatility of a non dividend paying European option
+    # Inputs:
+    # V - Option Value
+    # St - asset price at time t
+    # r - Interest rate
+    # T - time to option maturity
+    # K - Excerise/Strike price
+    # type - "C" or "P" for call or put
+    #
+    # Outputs:
+    # Implied Volatility %
+
+    # Initial volatility guess
+    sigma = .1
+
+    # Initial difference to enter while loop
+    diff  = 1
+
+    # Counter
+    count = 0
+
+    while abs(diff) >= 1e-3:
+
+        # Increment counter
+        count += 1
+
+        # Calculate call or put price of European option with no dividend payout
+        d1  = (np.log(St/K) + (r + (sigma**2/2))*T)/(sigma*np.sqrt(T))
+        d2  = d1 - sigma*np.sqrt(T)
+
+        if type == "C":
+            V_iter   = St*stat.norm.cdf(d1) - K*np.exp(-r*T)*stat.norm.cdf(d2)
+        elif type == "P":
+            V_iter   = St*(stat.norm.cdf(d1) - 1) + K*np.exp(-r*T)*(1 - stat.norm.cdf(d2))
+        else:
+            raise ValueError("Invalid option type. Use 'C' for Call or 'P' for Put.")
+
+        # Calculate vega - rate of change of value wrt volatility
+        vega = St*np.sqrt(T)*stat.norm.pdf(d1)
+
+        # Newton-Raphson 
+        sigma = sigma - (V_iter - V)/vega
+
+        # Calculate difference 
+        diff = V_iter - V
+
+        if count > 5000:
+            print("Max iterations")
+            break
+
+    return sigma*100
+    
