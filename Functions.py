@@ -3,6 +3,7 @@ from arch import arch_model
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats as stat
+from statsmodels.tsa.stattools import adfuller
 
 def BlackScholesEuroPrice(St, r, sigma, T, K):
     # Calculate call and put price of European option with no dividend payout
@@ -153,4 +154,18 @@ def EuroImpliedVolatility(V, St, r, T, K, type):
             break
 
     return sigma*100
-    
+
+def RunADF(data):
+    # Run ADF on data
+    adf_result  = adfuller(data)
+    p           = adf_result[1]
+
+    if p > .05:
+        print('p-value:', adf_result[1], " greater than 0.05, fail to reject the null hypothesis, non-stationary")
+    else:
+        print('p-value:', adf_result[1], " less than 0.05, reject the null hypothesis, stationary")
+
+    plt.figure()
+    plt.plot(data)
+
+    return adf_result
