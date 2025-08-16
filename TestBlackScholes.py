@@ -1,4 +1,3 @@
-import numpy as np
 from Functions import BlackScholesEuroPrice
 from Functions import EuroImpliedVolatility
 

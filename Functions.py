@@ -83,25 +83,6 @@ def Garch11(stock, start_date, end_date):
 
     return results, asset
 
-def GeometricSeries(p0, r, t):
-    # Inputs:
-    # p0    - Initial Amount
-    # r     - growth or decay rate +/-(%)
-    # t     - time for growth
-
-    # Outputs: 
-    # p     - Amount at time t
-    # st    - Sum over time frame t  
-
-    # Example: GeometricSeries(10,-5,2)  
-    # Principal amount of 10 with 5 % decay for 2 time periods
-
-    theta   = 1 + (r/100)                       # Common Ratio
-    p       = p0*theta**t                       # Geometric series value at time
-    st      = p0*(1 - theta**(t+1))/(1 - theta) # Sum of Geometric Series
-
-    return p, st
-
 def EuroImpliedVolatility(V, St, r, T, K, type):
     # Implied volatility of a non dividend paying European option
     # Inputs:
@@ -154,18 +135,3 @@ def EuroImpliedVolatility(V, St, r, T, K, type):
             break
 
     return sigma*100
-
-def RunADF(data):
-    # Run ADF on data
-    adf_result  = adfuller(data)
-    p           = adf_result[1]
-
-    if p > .05:
-        print('p-value:', adf_result[1], " greater than 0.05, fail to reject the null hypothesis, non-stationary")
-    else:
-        print('p-value:', adf_result[1], " less than 0.05, reject the null hypothesis, stationary")
-
-    plt.figure()
-    plt.plot(data)
-
-    return adf_result
