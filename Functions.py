@@ -135,3 +135,22 @@ def EuroImpliedVolatility(V, St, r, T, K, type):
             break
 
     return sigma*100
+
+def CorrCov(cov):
+    # Get correlation matrix from corresponding covariance matrix
+
+    # Verify symmetric and positive definite properties of covariance matrix
+    if not np.allclose(cov, np.transpose(cov)):
+        raise Warning("Covariance matrix is not symmetric.")
+    
+    elif np.min(np.linalg.eigvals(cov)) < 0:
+        raise ValueError("Covariance matrix is not positive semi-definite.")
+    
+    # Get diagonal matrix consisting of standard deviations from covariance matrix
+    D               = np.diag(np.sqrt(np.diag(cov)))
+    
+    # Calculate correlation matrix
+    corr             = np.linalg.inv(D) @ cov @ np.linalg.inv(D)
+
+    return corr
+
