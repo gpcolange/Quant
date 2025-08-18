@@ -116,8 +116,10 @@ def EuroImpliedVolatility(V, St, r, T, K, type):
 
         if type == "C":
             V_iter   = St*stat.norm.cdf(d1) - K*np.exp(-r*T)*stat.norm.cdf(d2)
+
         elif type == "P":
             V_iter   = St*(stat.norm.cdf(d1) - 1) + K*np.exp(-r*T)*(1 - stat.norm.cdf(d2))
+            
         else:
             raise ValueError("Invalid option type. Use 'C' for Call or 'P' for Put.")
 

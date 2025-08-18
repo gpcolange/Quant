@@ -1,7 +1,7 @@
 from Functions import BlackScholesEuroPrice
 from Functions import EuroImpliedVolatility
 
-# # Test Black Scholes European Pricing
+# Test Black Scholes European Pricing - Example 14.6 Hull
 St = 42
 K = 40
 r = 0.1
@@ -13,6 +13,7 @@ C,P = BlackScholesEuroPrice(St, r, sigma, T, K)
 sig = EuroImpliedVolatility(P, St, r, T, K, "P")
 print(sig)
 
+# Hull Chapter 14.11
 St = 21
 K = 20
 r = 0.1
